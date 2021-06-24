@@ -41,6 +41,18 @@ class Cart(models.Model):
     def __str__(self):
         return str(self.id)
 
+    @property
+    def get_cart_total(self):
+        itemsincart = self.itemincart_set.all()
+        total = sum([item.get_total for item in itemsincart])
+        return total
+
+    @property
+    def get_cart_items(self):
+        itemsincart = self.itemincart_set.all()
+        total = sum([item.quantity for item in itemsincart])
+        return total
+
 #Think of this as a state of the item being in the cart
 class ItemInCart(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
