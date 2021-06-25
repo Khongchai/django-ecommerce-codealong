@@ -11,10 +11,20 @@
       <table class="table">
         <tr>
           <th>
-            <h5>Items: <strong>3</strong></h5>
+            {% if not cart.get_cart_items%}
+            <h5>Items: <strong>0</strong></h5>
+            {% else %}
+            <h5>Items: <strong>{{cart.get_cart_items}}</strong></h5>
+            {% endif %}
           </th>
           <th>
-            <h5>Total:<strong> $42</strong></h5>
+            {% if not cart.get_cart_total%}
+            <h5>Items: <strong>$0</strong></h5>
+            {% else %}
+            <h5>
+              Items: <strong>${{cart.get_cart_total|floatformat:2}}</strong>
+            </h5>
+            {% endif %}
           </th>
           <th>
             <a
