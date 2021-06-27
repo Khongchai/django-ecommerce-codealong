@@ -41,6 +41,7 @@ class Cart(models.Model):
     def __str__(self):
         return str(self.id)
 
+    #You can call properties like they are properties, not functions, so no pair of parens at the end.
     @property
     def get_cart_total(self):
         itemsincart = self.itemincart_set.all()
@@ -52,6 +53,16 @@ class Cart(models.Model):
         itemsincart = self.itemincart_set.all()
         total = sum([item.quantity for item in itemsincart])
         return total
+
+    #check if shipping is requried
+    @property
+    def shipping(self):
+        shipping = False
+        items_in_cart = self.itemincart_set.all()
+        for item in items_in_cart:
+            if not item.product.digital:
+                shipping = True
+        return shipping
 
 #Think of this as a state of the item being in the cart
 class ItemInCart(models.Model):
