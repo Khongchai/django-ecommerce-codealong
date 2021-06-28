@@ -68,7 +68,9 @@
             <a href="{% url 'cart' %}">
               <img id="cart-icon" src="{% static 'images/cart.png' %}" />
             </a>
-            <p id="cart-total">{{items_in_cart}}</p>
+            <p id="cart-total">
+              {% if items_in_cart %} {{items_in_cart}} {% else %} 0 {% endif %}
+            </p>
           </div>
         </div>
       </nav>
