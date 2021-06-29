@@ -12,7 +12,7 @@ if (updateButtons.length > 0) {
       const productId = this.dataset.product;
       const action = this.dataset.action;
       if (user === "AnonymousUser") {
-        console.log("user not authenticated");
+        addCookieItem(productId, action);
       } else {
         updateUserOrder(productId, action);
       }
@@ -23,7 +23,16 @@ if (updateButtons.length > 0) {
 /**
  *
  * @param {number} productId
- * @param {string} action
+ * @param {"add" | "remove"} action
+ */
+function addCookieItem(productId, action) {
+  console.log("not logged in");
+}
+
+/**
+ *
+ * @param {number} productId
+ * @param {"add" | "remove"} action
  */
 function updateUserOrder(productId, action) {
   const url = "/update_item/";

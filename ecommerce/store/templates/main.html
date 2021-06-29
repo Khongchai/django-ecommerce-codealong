@@ -34,6 +34,26 @@
         return cookieValue;
       }
       const csrfToken = getCookie("csrftoken");
+
+      function getCookie(name) {
+        var cookieArr = document.cookie.split(";");
+
+        for (let i = 0; i < cookieArr.length; i++) {
+          const cookiePair = cookieArr[i].split("=");
+          if (name == cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+          }
+        }
+        return null;
+      }
+
+      let cart = JSON.parse(getCookie("cart"));
+      if (!cart) {
+        cart = {};
+        document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/";
+      }
+
+      console.log("Cart: ", cart);
     </script>
     <title>Ecom</title>
   </head>
