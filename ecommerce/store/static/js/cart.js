@@ -26,7 +26,24 @@ if (updateButtons.length > 0) {
  * @param {"add" | "remove"} action
  */
 function addCookieItem(productId, action) {
-  console.log("not logged in");
+  if (action == "add") {
+    if (!cart[productId]) {
+      cart[productId] = { quantity: 1 };
+    } else {
+      cart[productId]["quantity"] += 1;
+    }
+  }
+
+  if (action == "remove") {
+    cart[productId]["quantity"] -= 1;
+    if (cart[productId]["quantity"] < 1) {
+      delete cart[productId];
+    }
+  }
+
+  //Update cookie after changing the value of the cart.
+  document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/";
+  location.reload();
 }
 
 /**
