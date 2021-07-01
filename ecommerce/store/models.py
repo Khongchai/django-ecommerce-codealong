@@ -80,7 +80,6 @@ class ItemInCart(models.Model):
         return total
 
 
-
 class ShippingAddress(models.Model):
 	customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
 	cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True)

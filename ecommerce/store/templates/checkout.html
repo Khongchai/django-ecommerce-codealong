@@ -182,6 +182,9 @@
     })
       .then((response) => response.json())
       .then((data) => {
+        cart = {};
+        document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/";
+
         alert("Transaction completed");
         window.location.href = "{% url 'store' %}";
       });

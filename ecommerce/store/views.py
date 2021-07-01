@@ -13,6 +13,8 @@ def store(request):
 
 def cart(request):
     context = get_cart_and_items(request)
+    print(context)
+
     return render(request, "cart.html", context)
 
 def checkout(request):
@@ -52,16 +54,52 @@ def process_order(request):
     if request.user.is_authenticated:
         customer = request.user.customer
         cart, _ = Cart.objects.get_or_create(customer=customer, complete="False")
-        print(data["userFormData"])
-        total = float(data["userFormData"]["total"])
-        cart.transaction_id = transaction_id
-
-        #check if total sent is the same as the cart total
-        if total == cart.get_cart_total:
-            cart.complete = True
+       
         cart.save()
 
-        if cart.shipping == True:
+        
+    else:
+        print("User is not logged in ")
+
+        print("COOKIES", request.COOKIES)
+        name = data["userFormData"]["name"]
+        email = data["userFormData"]["name"]
+
+        context = get_cart_and_items(request)
+        items = context["items"]
+
+        # We're using get_or_create because the customer can sometimes decide to 
+        # just type stuff in instead of logging in. In that case, what we wanna do is to make
+        # sure that we don't overwrite an already existing account.
+        # So if a customer already exists, use the customer's data.
+        customer, _ = Customer.objects.get_or_create(
+            email=email,
+        )
+        customer.name = name
+        customer.save()
+
+        # Create a new cart(order) in the database
+        cart = Cart.objects.create(
+            customer=customer,
+            complete=False
+        )
+        for item in items:
+            product = Product.objects.get(id=item["product"]["id"])
+
+            _ = ItemInCart.objects.create(
+                product=product,
+                cart=cart,
+                quantity=item["quantity"]
+            )
+
+    total = float(data["userFormData"]["total"])
+    cart.transaction_id = transaction_id
+
+    #check if total sent is the same as the cart total
+    if total == cart.get_cart_total:
+        cart.complete = True
+
+    if cart.shipping == True:
             ShippingAddress.objects.create(
                 customer=customer,
                 cart=cart,
