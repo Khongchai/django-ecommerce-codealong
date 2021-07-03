@@ -13,7 +13,6 @@ def store(request):
 
 def cart(request):
     context = get_cart_and_items(request)
-    print(context)
 
     return render(request, "cart.html", context)
 
@@ -31,8 +30,6 @@ def update_item(request):
     cart, _ = Cart.objects.get_or_create(customer=customer, complete=False)
 
     item_in_cart, _ = ItemInCart.objects.get_or_create(cart=cart, product=product)
-
-    print("action is " + action)
 
     if action == "add":
         item_in_cart.quantity += 1
@@ -59,9 +56,6 @@ def process_order(request):
 
         
     else:
-        print("User is not logged in ")
-
-        print("COOKIES", request.COOKIES)
         name = data["userFormData"]["name"]
         email = data["userFormData"]["name"]
 
@@ -94,9 +88,10 @@ def process_order(request):
 
     total = float(data["userFormData"]["total"])
     cart.transaction_id = transaction_id
+    
 
     #check if total sent is the same as the cart total
-    if total == cart.get_cart_total:
+    if total == float(cart.get_cart_total):
         cart.complete = True
 
     if cart.shipping == True:
@@ -108,6 +103,7 @@ def process_order(request):
                 state=data["shippingInfo"]["state"],
                 zipcode=data["shippingInfo"]["zipcode"]
             )
+    cart.save()
 
     return JsonResponse("Payment Complete", safe=False)
 

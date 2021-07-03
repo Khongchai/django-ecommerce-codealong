@@ -47,7 +47,7 @@
         return null;
       }
 
-      let cart = JSON.parse(getCookie("cart"));
+      var cart = JSON.parse(getCookie("cart"));
       if (!cart) {
         cart = {};
         document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/";

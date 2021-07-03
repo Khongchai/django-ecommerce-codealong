@@ -115,6 +115,8 @@
 <script src="https://www.paypal.com/sdk/js?client-id=AX-Z2OhdYGufFZvNXoK7AQc_pnnZCsdHypZ_rXkpP_ceXqG30iqXRP4K7YHaeRfgEIciTFYOA6S4m8C-&currency=USD"></script>
 
 <script>
+  //This thing here is why we need to comfirm the price again in the backend.
+  //With the code here, anybody can just come and change the total.
   const totalToPay = "{{cart.get_cart_total}}";
 
   // Render the PayPal button into #paypal-button-container
@@ -143,9 +145,7 @@
       onApprove: function (data, actions) {
         return actions.order.capture().then(function (details) {
           // Show a success message to the buyer
-          alert(
-            "Transaction completed by " + details.payer.name.given_name + "!"
-          );
+          submitFormData();
         });
       },
     })
@@ -165,8 +165,6 @@
 
   //edge-cases
   if (shipping == "False" && user != "AnonymousUser") {
-    console.log("shipping is false");
-
     //Hide entire form if user is logged in and shipping is false
     document.getElementById("form-wrapper").classList.add("hidden");
     //Show payment if logged in user wants to buy an item that does not require shipping.
@@ -179,10 +177,6 @@
     document.getElementById("form-button").classList.add("hidden");
     document.getElementById("payment-info").classList.remove("hidden");
   });
-
-  {% comment %} document.getElementById("make-payment").addEventListener("click", (e) => {
-    submitFormData();
-  }); {% endcomment %}
 
   function submitFormData(e) {
     const userFormData = {
